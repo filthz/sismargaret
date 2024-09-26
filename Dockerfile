@@ -17,10 +17,10 @@ RUN git clone --depth 500 https://github.com/NyanCatTW1/cado-nfs && \
     git checkout 946125d6e8450967d1ca830f4e8730be09ad2f17 && \
     make -j $(nproc)
 
-COPY dreadpool-miner /
+COPY sismargaret-miner /
 COPY cado-client.sh /
 
-RUN chmod +x /dreadpool-miner /cado-client.sh
+RUN chmod +x /sismargaret-miner /cado-client.sh
 
 COPY application.yml /
 
