@@ -3,8 +3,7 @@
 SHELL_PATH=$2
 masterIP=$1
 cadoPort="24242"
-#cores
-# lscpu | grep '^CPU(s):' | awk '{print $2}'
+
 cpu_cores=$(lscpu | grep '^CPU(s):' | awk '{print $2}')
 processes=$(( cpu_cores / 2 ))
 basepath="/tmp/dreadpool/$(uuidgen)"
