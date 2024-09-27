@@ -24,5 +24,5 @@ RUN chmod +x /sismargaret-miner /cado-client.sh
 
 COPY application.yml /
 
-ENV DREADPOOL_IS_DOCKER=1
+ENV SISMARGARET_IS_DOCKER=1
 CMD ["/sismargaret-miner"]
