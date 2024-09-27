@@ -7,7 +7,7 @@
 Let us know if you use Linux distribution other than Ubuntu and need help setting up Docker  
 We don't have native Windows support yet, but [Docker on WSL 2](https://docs.docker.com/desktop/wsl) might work.
 
-### 1. Register on the community pool and copy your API key
+### 1. Register on Sister Margaret's and copy your API key
 Go to https://sismargaret.fact0rn.io/ and register by clicking "new user". Afterwards, retype your username/password to login.  
 Once you're in the dashboard, click on your username on the top left to enter the profile page. It's below "Sister Margaret's" and above "logout".  
 At the profile page, copy your API key (it starts with `eyJhbGciOiJIUzUxMiJ9.` and is roughly 227 characters long)  
@@ -47,7 +47,7 @@ sudo docker stop $(sudo docker ps -aq -f ancestor=margaret-miner); sudo docker r
 In the case above, you can view the miner's status by running `sudo docker logs -f $(sudo docker ps -aq -f ancestor=margaret-miner)`
 
 ### 4. Accept jobs or join existing factorizations
-Now that the miner is started and connected to the community pool, there are two ways you can start contributing to factoring Aliquot Sequences:  
+Now that the miner is started and connected to Sister Margaret's, there are two ways you can start contributing:  
 - On the "Open jobs" interface, choose a job you want to perform by pressing "compute". A few seconds later, your miner will start factoring the number. You can see that the job moved to "Jobs in progress". You'll know the number is factored when it moves to "Finished Jobs" or by monitoring the miner's logs.  
 - On the "Jobs in progress" interface, jobs with status "CALCULATING" allow you to help factoring the number by pressing "connect". This is especially helpful when the number is difficult (>= c130). You can't connect to jobs with status "NO_CONNECTION_MINER", because that means the owner of the miner didn't set up port forwarding on port 7777 and/or 24242.
 
