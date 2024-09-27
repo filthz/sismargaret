@@ -15,7 +15,7 @@ Keep the API key secret and don't send it to anyone else, including the develope
 
 ### 2. Download the custom miner and add your API key to application.yml
 Download the supplementary files from https://github.com/filthz/sismargaret/archive/refs/heads/main.zip and extract them somewhere.  
-Next, download the main file (sismargaret-miner) from https://github.com/filthz/sismargaret/releases and put it in the same location as the supplementary files. Dockerfile and sismargaret-miner should be in the same folder.  
+Next, download the main miner (sismargaret-miner) from https://github.com/filthz/sismargaret/releases and put it in the same location as the supplementary files. Dockerfile and sismargaret-miner should be in the same folder.  
 Now, open application.yml with your favorite text editor and paste your API key into the `authToken` field, like this:
 ```
 cadoPath: "/cado-nfs/cado-nfs.py"
