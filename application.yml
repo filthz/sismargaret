@@ -1,4 +1,4 @@
 cadoPath: "/cado-nfs/cado-nfs.py"
-cadoCliPath: "cado-client.sh"
+cadoCliPath: "/cado-client.sh"
 
 authToken: "<INSERT YOUR TOKEN>"
