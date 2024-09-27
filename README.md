@@ -29,22 +29,22 @@ Notice how the API key is within the double quotes
 Open a Terminal in the miner's folder. This can usually be done by pressing shift + right clicking within the folder and choosing the right option  
 Within the terminal, run the following command to install the miner:
 ```
-sudo docker build -t sismargaret-miner .
+sudo docker build -t margaret-miner .
 ```
 Run this command in the folder again every time you update the miner or the `application.yml` file.  
 This may take up to 10~20 minutes to run, depending on your CPU. During this period, the miner compiles Cado-NFS on your computer to make sure it's optimized for the CPU you have.  
 
 Finally, start the miner by running:
 ```
-sudo docker stop $(sudo docker ps -aq -f ancestor=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f ancestor=sismargaret-miner); sudo docker run --init -it -p 7777:7777 -p 24242:24242 sismargaret-miner
+sudo docker stop $(sudo docker ps -aq -f ancestor=margaret-miner); sudo docker rm $(sudo docker ps -aq -f ancestor=margaret-miner); sudo docker run --init -it -p 7777:7777 -p 24242:24242 margaret-miner
 ```
 The commands above stops and removes previously running miner instances, so you can also use it to restart the miner (eg. after an update or reboot)  
 
 If you want the miner to automatically restart after a reboot, add `-d --restart unless-stopped` to the command, like this:
 ```
-sudo docker stop $(sudo docker ps -aq -f ancestor=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f ancestor=sismargaret-miner); sudo docker run --init -it -p 7777:7777 -p 24242:24242 -d --restart unless-stopped sismargaret-miner
+sudo docker stop $(sudo docker ps -aq -f ancestor=margaret-miner); sudo docker rm $(sudo docker ps -aq -f ancestor=margaret-miner); sudo docker run --init -it -p 7777:7777 -p 24242:24242 -d --restart unless-stopped margaret-miner
 ```
-In the case above, you can view the miner's status by running `sudo docker logs -f $(sudo docker ps -aq -f ancestor=sismargaret-miner)`
+In the case above, you can view the miner's status by running `sudo docker logs -f $(sudo docker ps -aq -f ancestor=margaret-miner)`
 
 ### 4. Accept jobs or join existing factorizations
 Now that the miner is started and connected to the community pool, there are two ways you can start contributing to factoring Aliquot Sequences:  
