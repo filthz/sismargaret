@@ -19,7 +19,7 @@ Next, download the main miner (sismargaret-miner) from https://github.com/filthz
 Now, open application.yml with your favorite text editor and paste your API key into the `authToken` field, like this:
 ```
 cadoPath: "/cado-nfs/cado-nfs.py"
-cadoCliPath: "cado-client.sh"
+cadoCliPath: "/cado-client.sh"
 
 authToken: "eyJhbGciOiJIUzUxMiJ9.[REDACTED]"
 ```
