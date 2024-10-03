@@ -1,4 +1,6 @@
 cadoPath: "/cado-nfs/cado-nfs.py"
 cadoCliPath: "/cado-client.sh"
 
+# Change this to the output of the "nproc" command
+serverThreads: "16"
 authToken: "<INSERT YOUR TOKEN>"
