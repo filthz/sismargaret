@@ -21,9 +21,12 @@ Now, open application.yml with your favorite text editor and paste your API key 
 cadoPath: "/cado-nfs/cado-nfs.py"
 cadoCliPath: "/cado-client.sh"
 
+# Change this to the output of the "nproc" command
+serverThreads: "16"
 authToken: "eyJhbGciOiJIUzUxMiJ9.[REDACTED]"
 ```
-Notice how the API key is within the double quotes
+Notice how the API key is within the double quotes  
+You should also modify serverThreads to the amount of threads your CPU have. If you're not sure of the amount, you can run the `nproc` command and use its output instead. For instance, it'll be "32" on 7950X
 
 ### Notice: Updating from 1.0 to 1.1
 If you were using miner version 1.0, first stop it with `sudo docker stop $(sudo docker ps -aq -f ancestor=margaret-miner); sudo docker rm $(sudo docker ps -aq -f ancestor=margaret-miner)`  
