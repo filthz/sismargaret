@@ -58,7 +58,7 @@ Now that the miner is started and connected to Sister Margaret's, there are two 
 - On the "Open jobs" interface, choose a job you want to perform by pressing "compute". A few seconds later, your miner will start factoring the number. You can see that the job moved to "Jobs in progress". You'll know the number is factored when it moves to "Finished Jobs" or by monitoring the miner's logs.  
 - On the "Jobs in progress" interface, jobs with status "CALCULATING" allow you to help factoring the number by pressing "connect". This is especially helpful when the number is difficult (>= c130). You can't connect to jobs with status "NO_CONNECTION_MINER", because that means the owner of the miner didn't set up port forwarding on port 7777 and/or 24242.
 
-The "c" column stands for the digit, or the "difficulty" of the number. c100 can be factored within 10 minutes if you have a fast computer, c110 takes 3x more work to factor than c100, c120 takes 9x more work to factor than c100, etc.
+The "c" column stands for the digit, or the "difficulty" of the number. c100 can be factored within 10 minutes if you have a fast computer, c110 takes 4x more work to factor than c100, c120 takes 16x more work to factor than c100, etc.
 
 ### Updating the miner
 Repeat step 2 and 3 in the same folder, overwriting previously existing files.
