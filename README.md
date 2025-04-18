@@ -43,13 +43,13 @@ This may take up to 10~20 minutes to run, depending on your CPU. During this per
 
 Finally, start the miner by running:
 ```
-sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -p 7777:7777 -p 24242:24242 --name sismargaret-miner sismargaret-miner
+sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -v $(pwd)/logs:/logs -v $(pwd)/data:/tmp/dreadpool -p 7777:7777 -p 24242:24242 --name sismargaret-miner sismargaret-miner
 ```
 The commands above stops and removes previously running miner instances, so you can also use it to restart the miner (eg. after an update or reboot)  
 
 If you want the miner to automatically restart after a reboot, add `-d --restart unless-stopped` to the command, like this:
 ```
-sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -p 7777:7777 -p 24242:24242 -d --name sismargaret-miner --restart unless-stopped sismargaret-miner
+sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -v $(pwd)/logs:/logs -v $(pwd)/data:/tmp/dreadpool -p 7777:7777 -p 24242:24242 -d --name sismargaret-miner --restart unless-stopped sismargaret-miner
 ```
 In the case above, you can view the miner's status by running `sudo docker logs -f $(sudo docker ps -aq -f name=sismargaret-miner)`
 
@@ -58,7 +58,7 @@ Now that the miner is started and connected to Sister Margaret's, there are two 
 - On the "Open jobs" interface, choose a job you want to perform by pressing "compute". A few seconds later, your miner will start factoring the number. You can see that the job moved to "Jobs in progress". You'll know the number is factored when it moves to "Finished Jobs" or by monitoring the miner's logs.  
 - On the "Jobs in progress" interface, jobs with status "CALCULATING" allow you to help factoring the number by pressing "connect". This is especially helpful when the number is difficult (>= c130). You can't connect to jobs with status "NO_CONNECTION_MINER", because that means the owner of the miner didn't set up port forwarding on port 7777 and/or 24242.
 
-The "c" column stands for the digit, or the "difficulty" of the number. c100 can be factored within 10 minutes if you have a fast computer, c110 takes 3x more work to factor than c100, c120 takes 9x more work to factor than c100, etc.
+The "c" column stands for the digit, or the "difficulty" of the number. c100 can be factored within 10 minutes if you have a fast computer, c110 takes 4x more work to factor than c100, c120 takes 16x more work to factor than c100, etc.
 
 ### Updating the miner
 Repeat step 2 and 3 in the same folder, overwriting previously existing files.
