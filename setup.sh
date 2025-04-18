@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -e
+
 SISMARGARET_MINER_VERSION="1.3"
 
 # Check the presence of multiple commands, list the missing commands and exit
@@ -23,19 +25,14 @@ check_commands_exist sudo wget unzip docker
 
 # Download miner and its supplementary files
 wget https://github.com/filthz/sismargaret/archive/refs/heads/main.zip -O main.zip
-if [ $? -ne 0 ]; then
-    echo "Failed to download miner supplementary files. Please try again."
-    exit 1
-fi
 
-unzip main.zip
+TMP_DIR=$(mktemp -d)
+unzip main.zip -d "$TMP_DIR"
+mv "$TMP_DIR"/sismargaret-main/* .
+rm -rf "$TMP_DIR"
 rm -f main.zip
 
 wget https://github.com/filthz/sismargaret/releases/download/${SISMARGARET_MINER_VERSION}/sismargaret-miner -O sismargaret-miner
-if [ $? -ne 0 ]; then
-    echo "Failed to download the main miner. Please try again."
-    exit 1
-fi
 
 # Create needed folders
 mkdir -pv logs data
