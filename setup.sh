@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+SISMARGARET_MINER_VERSION="1.3"
+
+# Check the presence of multiple commands, list the missing commands and exit
+# if some of them are missing.
+check_commands_exist() {
+    missing_commands=""
+    for command in "$@"; do
+        if ! command -v "$command" >/dev/null 2>&1; then
+            missing_commands+="$command "
+        fi
+    done
+    if [ -n "$missing_commands" ]; then
+        echo "Missing commands: $missing_commands"
+        echo "Please install them first."
+        echo "sudo/wget/unzip are usually also available under package name sudo, wget and unzip."
+        echo "Docker install instruction: https://docs.docker.com/engine/install/ubuntu/"
+        exit 1
+    fi
+}
+
+check_commands_exist sudo wget unzip docker
+
+# Download miner and its supplementary files
+wget https://github.com/filthz/sismargaret/archive/refs/heads/main.zip -O main.zip
+if [ $? -ne 0 ]; then
+    echo "Failed to download miner supplementary files. Please try again."
+    exit 1
+fi
+
+unzip main.zip
+rm -f main.zip
+
+wget https://github.com/filthz/sismargaret/releases/download/${SISMARGARET_MINER_VERSION}/sismargaret-miner -O sismargaret-miner
+if [ $? -ne 0 ]; then
+    echo "Failed to download the main miner. Please try again."
+    exit 1
+fi
+
+# Create needed folders
+mkdir -pv logs data
+
+# Helper function to set a value in application.yml
+set_value() {
+    KEY="$1"
+    VALUE="$2"
+    sed -i "/^${KEY}: /d" application.yml
+    echo "${KEY}: \"${VALUE}\"" >> application.yml
+}
+
+# Unset default and update serverThreads in application.yml with nproc output
+THREADS=$(nproc)
+echo "Setting miner default serverThreads to $THREADS threads"
+set_value serverThreads "$THREADS"
+
+# Prompt the user for authToken
+while true; do
+    read -p "Paste your authToken (starts with eyJ): " authToken
+    # Strip the authToken of any leading/trailing whitespace
+    authToken=$(echo "$authToken" | xargs)
+    if [[ "$authToken" == eyJ* ]]; then
+        break
+    fi
+    echo "Invalid authToken. Please try again."
+done
+
+# Update authToken in application.yml
+set_value authToken "$authToken"
+
+# Build the custom miner with Docker
+sudo docker build -t sismargaret-miner .
+
+# Provide some basic instructions then exit
+echo "Miner installed/updated!"
+echo "To start the miner please run:"
+echo 'sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -v $(pwd)/logs:/logs -v $(pwd)/data:/tmp/dreadpool -p 7777:7777 -p 24242:24242 --name sismargaret-miner sismargaret-miner'
+
+echo "To start the miner and make it start automatically after a reboot, run:"
+echo 'sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -v $(pwd)/logs:/logs -v $(pwd)/data:/tmp/dreadpool -p 7777:7777 -p 24242:24242 --name sismargaret-miner -d --restart unless-stopped sismargaret-miner'
+echo "To view miner log, check the logs folder or run this command:"
+echo 'sudo docker logs -f $(sudo docker ps -aq -f name=sismargaret-miner)'
+
+echo "To stop the miner, run:"
+echo 'sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner)'
+
+echo "To remove the miner, stop the miner, then simply delete the folder."
