@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -e
+
 SISMARGARET_MINER_VERSION="1.3"
 
 # Check the presence of multiple commands, list the missing commands and exit
@@ -21,21 +23,33 @@ check_commands_exist() {
 
 check_commands_exist sudo wget unzip docker
 
-# Download miner and its supplementary files
-wget https://github.com/filthz/sismargaret/archive/refs/heads/main.zip -O main.zip
-if [ $? -ne 0 ]; then
-    echo "Failed to download miner supplementary files. Please try again."
-    exit 1
+# Helper function to fetch a value from application.yml into same variable namd as the key
+# Strips double quotes if they exist
+get_value() {
+    KEY="$1"
+    VALUE=$(sed -n "/^${KEY}: /s/.*: //p" application.yml)
+
+    # Remove leading/trailing double quote
+    VALUE=$(echo "$VALUE" | sed 's/^"//;s/"$//')
+
+    eval "$KEY="$VALUE""
+}
+
+# This may be an update, so let's cache specified authToken if application.yml exists
+if [ -f application.yml ]; then
+    get_value authToken
 fi
 
-unzip main.zip
+# Download miner and its supplementary files
+wget https://github.com/filthz/sismargaret/archive/refs/heads/main.zip -O main.zip
+
+TMP_DIR=$(mktemp -d)
+unzip main.zip -d "$TMP_DIR"
+mv "$TMP_DIR"/sismargaret-main/* .
+rm -rf "$TMP_DIR"
 rm -f main.zip
 
 wget https://github.com/filthz/sismargaret/releases/download/${SISMARGARET_MINER_VERSION}/sismargaret-miner -O sismargaret-miner
-if [ $? -ne 0 ]; then
-    echo "Failed to download the main miner. Please try again."
-    exit 1
-fi
 
 # Create needed folders
 mkdir -pv logs data
@@ -53,16 +67,20 @@ THREADS=$(nproc)
 echo "Setting miner default serverThreads to $THREADS threads"
 set_value serverThreads "$THREADS"
 
-# Prompt the user for authToken
-while true; do
-    read -p "Paste your authToken (starts with eyJ): " authToken
-    # Strip the authToken of any leading/trailing whitespace
-    authToken=$(echo "$authToken" | xargs)
-    if [[ "$authToken" == eyJ* ]]; then
-        break
-    fi
-    echo "Invalid authToken. Please try again."
-done
+# Reuse current authToken if it's valid
+if [[ "$authToken" == eyJ* ]]; then
+    echo "Using existing authToken"
+else
+    while true; do
+        read -p "Paste your authToken (starts with eyJ): " authToken
+        # Strip the authToken of any leading/trailing whitespace
+        authToken=$(echo "$authToken" | xargs)
+        if [[ "$authToken" == eyJ* ]]; then
+            break
+        fi
+        echo "Invalid authToken. Please try again."
+    done
+fi
 
 # Update authToken in application.yml
 set_value authToken "$authToken"
@@ -77,8 +95,7 @@ echo 'sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo doc
 
 echo "To start the miner and make it start automatically after a reboot, run:"
 echo 'sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -v $(pwd)/logs:/logs -v $(pwd)/data:/tmp/dreadpool -p 7777:7777 -p 24242:24242 --name sismargaret-miner -d --restart unless-stopped sismargaret-miner'
-echo "To view miner log, check the logs folder or run this command:"
-echo 'sudo docker logs -f $(sudo docker ps -aq -f name=sismargaret-miner)'
+echo "To view miner log, check logs/miner.log in the miner folder"
 
 echo "To stop the miner, run:"
 echo 'sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner)'
