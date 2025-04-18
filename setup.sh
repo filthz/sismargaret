@@ -23,6 +23,23 @@ check_commands_exist() {
 
 check_commands_exist sudo wget unzip docker
 
+# Helper function to fetch a value from application.yml into same variable namd as the key
+# Strips double quotes if they exist
+get_value() {
+    KEY="$1"
+    VALUE=$(sed -n "/^${KEY}: /s/.*: //p" application.yml)
+
+    # Remove leading/trailing double quote
+    VALUE=$(echo "$VALUE" | sed 's/^"//;s/"$//')
+
+    eval "$KEY="$VALUE""
+}
+
+# This may be an update, so let's cache specified authToken if application.yml exists
+if [ -f application.yml ]; then
+    get_value authToken
+fi
+
 # Download miner and its supplementary files
 wget https://github.com/filthz/sismargaret/archive/refs/heads/main.zip -O main.zip
 
@@ -50,16 +67,20 @@ THREADS=$(nproc)
 echo "Setting miner default serverThreads to $THREADS threads"
 set_value serverThreads "$THREADS"
 
-# Prompt the user for authToken
-while true; do
-    read -p "Paste your authToken (starts with eyJ): " authToken
-    # Strip the authToken of any leading/trailing whitespace
-    authToken=$(echo "$authToken" | xargs)
-    if [[ "$authToken" == eyJ* ]]; then
-        break
-    fi
-    echo "Invalid authToken. Please try again."
-done
+# Reuse current authToken if it's valid
+if [[ "$authToken" == eyJ* ]]; then
+    echo "Using existing authToken"
+else
+    while true; do
+        read -p "Paste your authToken (starts with eyJ): " authToken
+        # Strip the authToken of any leading/trailing whitespace
+        authToken=$(echo "$authToken" | xargs)
+        if [[ "$authToken" == eyJ* ]]; then
+            break
+        fi
+        echo "Invalid authToken. Please try again."
+    done
+fi
 
 # Update authToken in application.yml
 set_value authToken "$authToken"
