@@ -43,13 +43,13 @@ This may take up to 10~20 minutes to run, depending on your CPU. During this per
 
 Finally, start the miner by running:
 ```
-sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -p 7777:7777 -p 24242:24242 --name sismargaret-miner sismargaret-miner
+sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -v $(pwd)/logs:/logs -v $(pwd)/data:/tmp/dreadpool -p 7777:7777 -p 24242:24242 --name sismargaret-miner sismargaret-miner
 ```
 The commands above stops and removes previously running miner instances, so you can also use it to restart the miner (eg. after an update or reboot)  
 
 If you want the miner to automatically restart after a reboot, add `-d --restart unless-stopped` to the command, like this:
 ```
-sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -p 7777:7777 -p 24242:24242 -d --name sismargaret-miner --restart unless-stopped sismargaret-miner
+sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -v $(pwd)/logs:/logs -v $(pwd)/data:/tmp/dreadpool -p 7777:7777 -p 24242:24242 -d --name sismargaret-miner --restart unless-stopped sismargaret-miner
 ```
 In the case above, you can view the miner's status by running `sudo docker logs -f $(sudo docker ps -aq -f name=sismargaret-miner)`
 
