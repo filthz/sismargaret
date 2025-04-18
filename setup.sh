@@ -86,7 +86,7 @@ fi
 set_value authToken "$authToken"
 
 # Build the custom miner with Docker
-sudo docker build -t sismargaret-miner .
+./rebuild-miner.sh
 
 # Provide some basic instructions then exit
 echo "Miner installed/updated!"
@@ -96,6 +96,6 @@ echo "bash start-miner.sh"
 echo "To view miner log, check logs/miner.log in the miner folder"
 
 echo "To stop the miner, run:"
-echo 'sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner)'
+echo "bash stop-miner.sh"
 
 echo "To remove the miner, stop the miner, then simply delete the folder."
