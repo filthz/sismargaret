@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 SISMARGARET_MINER_VERSION="1.3"
 
-# Check the existence of multiple commands, list the missing commands and exit
-# if some of the are missing.
+# Check the presence of multiple commands, list the missing commands and exit
+# if some of them are missing.
 check_commands_exist() {
     missing_commands=""
     for command in "$@"; do
@@ -49,7 +49,9 @@ set_value() {
 }
 
 # Unset default and update serverThreads in application.yml with nproc output
-set_value serverThreads "$(nproc)"
+THREADS=$(nproc)
+echo "Setting miner default serverThreads to $THREADS threads"
+set_value serverThreads "$THREADS"
 
 # Prompt the user for authToken
 while true; do
