@@ -91,10 +91,8 @@ sudo docker build -t sismargaret-miner .
 # Provide some basic instructions then exit
 echo "Miner installed/updated!"
 echo "To start the miner please run:"
-echo 'sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -v $(pwd)/logs:/logs -v $(pwd)/data:/tmp/dreadpool -p 7777:7777 -p 24242:24242 --name sismargaret-miner sismargaret-miner'
+echo "bash start-miner.sh"
 
-echo "To start the miner and make it start automatically after a reboot, run:"
-echo 'sudo docker stop $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker rm $(sudo docker ps -aq -f name=sismargaret-miner); sudo docker run --init -it -v $(pwd)/logs:/logs -v $(pwd)/data:/tmp/dreadpool -p 7777:7777 -p 24242:24242 --name sismargaret-miner -d --restart unless-stopped sismargaret-miner'
 echo "To view miner log, check logs/miner.log in the miner folder"
 
 echo "To stop the miner, run:"
