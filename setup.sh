@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-SISMARGARET_MINER_VERSION="1.5"
+SISMARGARET_MINER_VERSION="1.6"
 
 # Check the presence of multiple commands, list the missing commands and exit
 # if some of them are missing.
